@@ -1,0 +1,50 @@
+[
+    {
+        "model": "warehouse.product",
+        "pk": 1,
+        "fields": {
+            "product_template": 2,
+            "quantity": 60,
+            "cost": "30.00",
+            "code": "Футболка",
+            "cut": 3,
+            "photo": "",
+            "warehouse": 1,
+            "seamstress": "50.00",
+            "technologist": "200.00",
+            "iron_worker": "100.00",
+            "button_attacher": "100.00",
+            "packer": "100.00",
+            "otk": "80.00",
+            "cleaner": "40.00",
+            "packet": "40.00",
+            "button": "50.00",
+            "is_active": true,
+            "is_delete": false
+        }
+    },
+  {
+        "model": "warehouse.product",
+        "pk": 2,
+        "fields": {
+            "product_template": 2,
+            "quantity": 60,
+            "cost": "60.00",
+            "code": "Футболка",
+            "cut": 2,
+            "photo": "",
+            "warehouse": 1,
+            "seamstress": "100.00",
+            "technologist": "200.00",
+            "iron_worker": "100.00",
+            "button_attacher": "100.00",
+            "packer": "100.00",
+            "otk": "80.00",
+            "cleaner": "40.00",
+            "packet": "40.00",
+            "button": "50.00",
+            "is_active": true,
+            "is_delete": false
+        }
+    }
+]

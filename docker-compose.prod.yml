@@ -1,0 +1,43 @@
+version: '3.10'
+
+services:
+  web:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: bash -c "python manage.py collectstatic --no-input && gunicorn core.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - static_data:/usr/src/backend/static
+      - media_data:/usr/src/backend/media
+    expose:
+      - 8000
+    depends_on:
+      - db
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  db:
+    build:
+      context: ./db
+    restart: always
+    volumes:
+       - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - static_data:/backend/static
+      - media_data:/backend/media
+    ports:
+      - "8080:80"
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_data:
+  media_data:

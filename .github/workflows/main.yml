@@ -1,0 +1,222 @@
+name: CI-CD
+
+on:
+  push:
+    branches:
+      - master
+env:
+  WEB_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/web
+  DB_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/db
+  NGINX_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/nginx
+
+
+jobs:
+
+  build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v1
+      - name: Add environment variables to .env
+        run: |
+          echo DEBUG=${{ secrets.DEBUG }} >> .env
+          echo SQL_ENGINE=${{ secrets.SQL_ENGINE }} >> .env
+          echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+          echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
+          echo POSTGRES_NAME=${{ secrets.POSTGRES_NAME }} >> .env
+          echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+          echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+          echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
+          echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env
+      - name: Set environment variables
+        run: |
+          echo "WEB_IMAGE=$(echo ${{env.WEB_IMAGE}} )" >> $GITHUB_ENV
+          echo "NGINX_IMAGE=$(echo ${{env.NGINX_IMAGE}} )" >> $GITHUB_ENV
+          echo "DB_IMAGE=$(echo ${{env.DB_IMAGE}} )" >> $GITHUB_ENV
+      - name: Log in to GitHub Packages
+        run: echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Pull images
+        run: |
+          docker pull ${{ env.WEB_IMAGE }} || true
+          docker pull ${{ env.NGINX_IMAGE }} || true
+          docker pull ${{ env.DB_IMAGE }} || true
+      - name: Build images
+        run: |
+          docker-compose -f docker-compose.prod.yml build
+      - name: Push images
+        run: |
+          docker push ${{ env.WEB_IMAGE }}
+          docker push ${{ env.DB_IMAGE }}
+          docker push ${{ env.NGINX_IMAGE }}
+  deploy:
+    name: Deploy to DigitalOcean
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v1
+      - name: Get directory
+        run: ls
+      - name: Add environment variables to .env
+        run: |
+          echo DEBUG=${{ secrets.DEBUG }} >> .env
+          echo SQL_ENGINE=${{ secrets.SQL_ENGINE }} >> .env
+          echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+          echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
+          echo POSTGRES_NAME=${{ secrets.POSTGRES_NAME }} >> .env
+          echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+          echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+          echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
+          echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env
+          echo WEB_IMAGE=${{ env.WEB_IMAGE }} >> .env
+          echo DB_IMAGE=${{ env.DB_IMAGE }} >> .env
+          echo NGINX_IMAGE=${{ env.NGINX_IMAGE }} >> .env
+          echo NAMESPACE=${{ secrets.NAMESPACE }} >> .env
+          echo PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }} >> .env
+
+      - name: Add the private SSH key to the ssh-agent
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ls
+          mkdir -p ~/.ssh
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-add - <<< "${{ secrets.PRIVATE_KEY }}"
+      - name: Build and deploy images on DigitalOcean
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          scp  -o StrictHostKeyChecking=no -r ./.env ./docker-compose.prod.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/backend
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
+            cd /backend
+            source .env
+            docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
+            docker pull $WEB_IMAGE
+            docker pull $DB_IMAGE
+            docker pull $NGINX_IMAGE
+            docker-compose -f docker-compose.prod.yml down && docker-compose -f docker-compose.prod.yml up -d
+          ENDSSH
+#
+#
+#
+##jobs:
+##  build:
+##    runs-on: ubuntu-latest
+##    env:
+##      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+##      SQL_ENGINE: ${{ secrets.SQL_ENGINE }}
+##      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+#      POSTGRES_NAME: ${{ secrets.POSTGRES_NAME }}
+#      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+#      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+#      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+#      POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+#      DEFAULT_ADMIN_NAME: ${{ secrets.DEFAULT_ADMIN_NAME }}
+#      DEFAULT_ADMIN_PASSWORD: ${{ secrets.DEFAULT_ADMIN_PASSWORD}}
+#      DEBUG: ${{ secrets.DEBUG }}
+#
+#
+#    steps:
+#      # Cloning repository
+#      - name: Clone repo
+#        uses: actions/checkout@v4
+#
+#      - name: DB
+#        run: |
+#          docker compose -f docker-compose.prod.yml pull db || true
+#          docker compose -f docker-compose.prod.yml build db
+#          docker compose -f docker-compose.prod.yml push db
+#
+#      - name: Backend
+#        run: |
+#          docker compose -f docker-compose.prod.yml pull web || true
+#          docker compose -f docker-compose.prod.yml build web
+#          docker compose -f docker-compose.prod.yml push web
+#
+#      - name: Nginx
+#        run: |
+#          docker compose -f docker-compose.prod.yml pull nginx || true
+#          docker compose -f docker-compose.prod.yml build nginx
+#          docker compose -f docker-compose.prod.yml push nginx
+#
+#  tests:
+#    runs-on: ubuntu-latest
+#    needs: [ build ]
+#    env:
+#      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+#      SQL_ENGINE: ${{ secrets.SQL_ENGINE }}
+#      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+#      POSTGRES_NAME: ${{ secrets.POSTGRES_NAME }}
+#      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+#      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+#      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+#      POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+#
+#    steps:
+#      - name: Clone repo
+#        uses: actions/checkout@v4
+#
+#      - name: Pull web
+#        run: docker compose -f docker-compose.prod.yml pull web || true
+#
+#      - name: Pull db
+#        run: docker compose -f docker-compose.prod.yml pull db || true
+#
+#      # Run tests in the backend service
+#      - name: Test backend
+#        run: docker compose -f docker-compose.prod.yml run --rm web /bin/sh -c "pytest -p no:warnings"
+#
+#
+#  deploy:
+#    runs-on: ubuntu-latest
+#    needs: [ tests ]
+#
+#    steps:
+#      # Cloning repository
+#      - name: Clone repo
+#        uses: actions/checkout@v4
+#
+##        build:
+##          name: Deploy
+##          runs-on: ubuntu-latest
+##          steps:
+##            - name: executing remote ssh commands to pull and recreate containers
+##              uses: appleboy/ssh-action@v0.1.7
+##              with:
+##                host: ${{ secrets.TOP_HOST }}
+##                username: ${{ secrets.TOP_USER }}
+##                password: ${{ secrets.TOP_PASSWORD }}
+##                port: ${{ secrets.TOP_PORT }}
+##                script: |
+##                  git -C /home/top_kg_back pull origin main
+##                  cd /home/top_kg_back && docker compose -f /home/top_kg_back/docker-compose.yml down
+##                  docker compose -f /home/top_kg_back/docker-compose.yml up -d --build
+#
+#      # Setup SSH
+#      - name: Setup SSH
+#        uses: webfactory/ssh-agent@v0.7.0
+#        with:
+#          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+#
+#      # Deploy to server
+#      - name: Deploy to server
+#        run: |
+#          which ssh-agent || ( apk --update add openssh-client )
+#          eval $(ssh-agent -s)
+#          echo "${{ secrets.DEPLOY_SSH_KEY }}" | tr -d '\r' | ssh-add - > /dev/null
+#          mkdir -p ~/.ssh
+#          chmod 700 ~/.ssh
+#          ssh-keyscan github.com >> ~/.ssh/known_hosts
+#          chmod 644 ~/.ssh/known_hosts
+#          echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+#          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ~/backend/ && git pull origin master"
+#
+#      # Run server
+#      - name: Run server
+#        run: ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "cd ~/backend/ && docker compose -f docker-compose.prod.yml down && docker compose -f docker-compose.prod.yml up --build --remove-orphans -d"
+#
+
