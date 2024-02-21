@@ -1,0 +1,32 @@
+[
+    {
+        "model": "warehouse.materialtemplate",
+        "pk": 1,
+        "fields": {
+            "name": "Шелк",
+            "unit": "метр",
+            "color": "Зеленый",
+            "is_delete": false
+        }
+    },
+  {
+        "model": "warehouse.materialtemplate",
+        "pk": 2,
+        "fields": {
+            "name": "Хлопок",
+            "unit": "метр",
+            "color": "Белый",
+            "is_delete": false
+        }
+    },
+    {
+        "model": "warehouse.materialtemplate",
+        "pk": 3,
+        "fields": {
+            "name": "Атлас",
+            "unit": "метр",
+            "color": "Красный",
+            "is_delete": false
+        }
+    }
+]

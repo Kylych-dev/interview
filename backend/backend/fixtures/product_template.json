@@ -1,0 +1,103 @@
+[
+    {
+        "model": "warehouse.producttemplate",
+        "pk": 1,
+        "fields": {
+            "name": "Футболка",
+            "color": "Синий",
+            "size": "s",
+            "is_delete": false
+        }
+    },
+   {
+        "model": "warehouse.producttemplate",
+        "pk": 2,
+        "fields": {
+            "name": "Брюки",
+            "color": "Синий",
+            "size": "m",
+            "is_delete": false
+        }
+    },
+  {
+        "model": "warehouse.producttemplate",
+        "pk": 3,
+        "fields": {
+            "name": "Жилет",
+            "color": "Синий",
+            "size": "l",
+            "is_delete": false
+        }
+    },
+  {
+        "model": "warehouse.producttemplate",
+        "pk": 4,
+        "fields": {
+            "name": "Куртка",
+            "color": "Темно-Синий",
+            "size": "s",
+            "is_delete": false
+        }
+    },
+    {
+        "model": "warehouse.producttemplate",
+        "pk": 5,
+        "fields": {
+            "name": "Сарафан",
+            "color": "Темно-Синий",
+            "size": "m",
+            "is_delete": false
+        }
+    },
+   {
+        "model": "warehouse.producttemplate",
+        "pk": 6,
+        "fields": {
+            "name": "Пиджак",
+            "color": "Темно-Синий",
+            "size": "l",
+            "is_delete": false
+        }
+    },
+    {
+        "model": "warehouse.producttemplate",
+        "pk": 7,
+        "fields": {
+            "name": "Юбка",
+            "color": "Черный",
+            "size": "s",
+            "is_delete": false
+        }
+    },
+   {
+        "model": "warehouse.producttemplate",
+        "pk": 8,
+        "fields": {
+            "name": "Рубашка",
+            "color": "Черный",
+            "size": "m",
+            "is_delete": false
+        }
+    },
+   {
+        "model": "warehouse.producttemplate",
+        "pk": 9,
+        "fields": {
+            "name": "Шорты",
+            "color": "Черный",
+            "size": "l",
+            "is_delete": false
+        }
+    },
+     {
+        "model": "warehouse.producttemplate",
+        "pk": 10,
+        "fields": {
+            "name": "Галстук",
+            "color": "Красное",
+            "size": "s",
+            "is_delete": false
+        }
+    }
+
+]

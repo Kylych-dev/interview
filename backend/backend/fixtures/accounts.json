@@ -1,0 +1,188 @@
+[
+  {
+    "model": "accounts.userrole",
+    "pk": 1,
+    "fields": {
+      "role_name": "Швея"
+    }
+  },
+  {
+    "model": "accounts.userrole",
+    "pk": 2,
+    "fields": {
+      "role_name": "Технолог"
+    }
+  },
+  {
+    "model": "accounts.userrole",
+    "pk": 3,
+    "fields": {
+      "role_name": "Директор"
+    }
+  },
+  {
+    "model": "accounts.userrole",
+    "pk": 4,
+    "fields": {
+      "role_name": "OTP"
+    }
+  },
+  {
+    "model": "accounts.userrole",
+    "pk": 5,
+    "fields": {
+      "role_name": "Утюжник"
+    }
+  },
+  {
+    "model": "accounts.userrole",
+    "pk": 6,
+    "fields": {
+      "role_name": "Упаковщик"
+    }
+  },
+  {
+    "model": "accounts.employmentstatus",
+    "pk": 1,
+    "fields": {
+      "status_name": "В поисках работы"
+    }
+  },
+  {
+    "model": "accounts.employmentstatus",
+    "pk": 2,
+    "fields": {
+      "status_name": "Есть работа"
+    }
+  },
+  {
+    "model": "accounts.employmentstatus",
+    "pk": 3,
+    "fields": {
+      "status_name": "В Декрете"
+    }
+  },
+  {
+    "model": "accounts.employmentstatus",
+    "pk": 4,
+    "fields": {
+      "status_name": "Удаленная работа"
+    }
+  },
+  {
+    "model": "accounts.employmentstatus",
+    "pk": 5,
+    "fields": {
+      "status_name": "Находится в отпуске"
+    }
+  },
+  {
+    "model": "accounts.employmentstatus",
+    "pk": 6,
+    "fields": {
+      "status_name": "Больничный"
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "pk": 2,
+    "fields": {
+      "password": "qwerty100!",
+      "phone_number": "996777111222",
+      "slug": "",
+      "first_name": "Вера",
+      "last_name": "Брежнева",
+      "role": 1,
+      "sewing_workshop": 1,
+      "employment_status": 1,
+      "is_active": true,
+      "date_joined": "2024-01-16T03:13:46.444Z",
+      "updated_at": "2024-01-16T03:13:46.582Z"
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "pk": 3,
+    "fields": {
+      "password": "qwerty100!",
+      "phone_number": "996777111223",
+      "slug": "",
+      "first_name": "Нуржан",
+      "last_name": "Асанова",
+      "role": 1,
+      "sewing_workshop": 1,
+      "employment_status": 1,
+      "is_active": true,
+      "date_joined": "2024-01-16T03:13:46.444Z",
+      "updated_at": "2024-01-16T03:13:46.582Z"
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "pk": 4,
+    "fields": {
+      "password": "qwerty100!",
+      "phone_number": "996777111224",
+      "slug": "",
+      "first_name": "Нуржан",
+      "last_name": "Асанова",
+      "role": 4,
+      "sewing_workshop": 1,
+      "employment_status": 1,
+      "is_active": true,
+      "date_joined": "2024-01-16T03:13:46.444Z",
+      "updated_at": "2024-01-16T03:13:46.582Z"
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "pk": 5,
+    "fields": {
+      "password": "qwerty100!",
+      "phone_number": "996777111220",
+      "slug": "",
+      "first_name": "Кылыч",
+      "last_name": "Мирбеков",
+      "role": 6,
+      "sewing_workshop": 2,
+      "employment_status": 1,
+      "is_active": true,
+      "date_joined": "2024-01-16T03:13:46.444Z",
+      "updated_at": "2024-01-16T03:13:46.582Z"
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "pk": 6,
+    "fields": {
+      "password": "qwerty100!",
+      "phone_number": "996777111224",
+      "slug": "",
+      "first_name": "Кылыч",
+      "last_name": "Мирбеков",
+      "role": 6,
+      "sewing_workshop": 2,
+      "employment_status": 1,
+      "is_active": true,
+      "date_joined": "2024-01-16T03:13:46.444Z",
+      "updated_at": "2024-01-16T03:13:46.582Z"
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "pk": 7,
+    "fields": {
+      "password": "qwerty100!",
+      "phone_number": "996777111226",
+      "slug": "",
+      "first_name": "Геннадий",
+      "last_name": "Хазанов",
+      "role": 5,
+      "sewing_workshop": 2,
+      "employment_status": 1,
+      "is_active": true,
+      "date_joined": "2024-01-16T03:13:46.444Z",
+      "updated_at": "2024-01-16T03:13:46.582Z"
+    }
+  }
+]

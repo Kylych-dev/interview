@@ -1,0 +1,22 @@
+[
+    {
+        "model": "workshop.sewingworkshop",
+        "pk": 1,
+        "fields": {
+            "name": "Швейный цех № 1",
+            "slug": "shvejnyj-ceh-1",
+            "phone_number": "99622211133",
+            "is_delete": false
+        }
+    },
+       {
+        "model": "workshop.sewingworkshop",
+        "pk": 2,
+        "fields": {
+            "name": "Швейный цех № 2",
+            "slug": "shvejnyj-ceh-2",
+            "phone_number": "99622211136",
+            "is_delete": false
+        }
+    }
+]

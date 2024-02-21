@@ -1,0 +1,46 @@
+[
+    {
+        "model": "client.client",
+        "pk": 1,
+        "fields": {
+            "full_name": "Анна Пушкина",
+            "phone_number": "996222112233",
+            "address": "Байтик Баатыра, 1/6",
+            "warehouse": 1,
+            "is_delete": false
+        }
+    },
+    {
+        "model": "client.client",
+        "pk": 2,
+        "fields": {
+            "full_name": "Вера Иванова",
+            "phone_number": "996222112234",
+            "address":  "пр.Манаса, 1/6",
+            "warehouse": 1,
+            "is_delete": false
+        }
+    },
+    {
+        "model": "client.client",
+        "pk": 3,
+        "fields": {
+            "full_name": "Эрмек Усенов",
+            "phone_number": "996222112235",
+            "address": "Исы Ахунбаева, 131",
+            "warehouse": 1,
+            "is_delete": false
+        }
+    },
+    {
+        "model": "client.client",
+        "pk": 4,
+        "fields": {
+            "full_name": "Усен Усенов",
+            "phone_number": "996222112236",
+            "address": "пр.Манаса, 131",
+            "warehouse": 1,
+            "is_delete": false
+        }
+    }
+]
